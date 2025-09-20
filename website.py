@@ -4,7 +4,11 @@ import joblib
 import numpy as np
 
 # --- Load pipeline ---
-pipeline = joblib.load("pipeline.pkl")
+try:
+    pipeline = joblib.load("pipeline.pkl")
+except Exception as e:
+    st.error(f"Error loading pipeline.pkl: {e}")
+    st.stop()
 
 # --- Page config ---
 st.set_page_config(
@@ -17,20 +21,25 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    body {
+    /* Background and text */
+    body, .stApp {
         background-color: #0E1117;
         color: #FAFAFA;
     }
+    /* Buttons */
     .stButton>button {
         background-color: #1f77b4;
         color: white;
     }
-    .stSlider>div>div>div>div {
-        color: black;
+    /* Sidebar inputs */
+    .stSlider>div>div>div>div, .stNumberInput>div>input, .stSelectbox>div>div>div {
+        color: black !important;
+        background-color: #e0e0e0 !important;
     }
-    .stNumberInput>div>input {
-        color: black;
-        background-color: #e0e0e0;
+    /* Dataframe display */
+    .stDataFrame>div>div>div>div {
+        color: black !important;
+        background-color: #FAFAFA !important;
     }
     </style>
     """, unsafe_allow_html=True
@@ -96,10 +105,10 @@ if st.session_state.history:
     
     # Flatten the dictionary for display
     history_df = pd.DataFrame([
-        {k: v[0] if isinstance(v, list) else v for k, v in record.items()} 
+        {k: (v[0] if isinstance(v, list) else v) for k, v in record.items()} 
         for record in st.session_state.history
     ])
-    st.dataframe(history_df)
+    st.dataframe(history_df, use_container_width=True)
 
 st.markdown("---")
 st.markdown("**Note:** The prediction is based on a trained machine learning model. Actual prices may vary.")
