@@ -3,10 +3,39 @@ import pandas as pd
 import joblib
 import numpy as np
 
-# Load pipeline
+# --- Load pipeline ---
 pipeline = joblib.load("pipeline.pkl")
 
-st.set_page_config(page_title="🏡 House Price Predictor", page_icon="🏠", layout="wide")
+# --- Page config ---
+st.set_page_config(
+    page_title="🏡 House Price Predictor", 
+    page_icon="🏠", 
+    layout="wide"
+)
+
+# --- Dark mode styling ---
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #0E1117;
+        color: #FAFAFA;
+    }
+    .stButton>button {
+        background-color: #1f77b4;
+        color: white;
+    }
+    .stSlider>div>div>div>div {
+        color: black;
+    }
+    .stNumberInput>div>input {
+        color: black;
+        background-color: #e0e0e0;
+    }
+    </style>
+    """, unsafe_allow_html=True
+)
+
 st.title("🏡 House Price Prediction App")
 st.markdown("Enter the details below to predict the house price.")
 
@@ -59,6 +88,18 @@ if st.button("Predict Price"):
         st.session_state.history.append({**input_dict, "predicted_price": prediction})
     except Exception as e:
         st.error(f"Error in prediction: {e}")
+
+# --- Show previous predictions ---
+if st.session_state.history:
+    st.markdown("---")
+    st.subheader("📜 Previous Predictions")
+    
+    # Flatten the dictionary for display
+    history_df = pd.DataFrame([
+        {k: v[0] if isinstance(v, list) else v for k, v in record.items()} 
+        for record in st.session_state.history
+    ])
+    st.dataframe(history_df)
 
 st.markdown("---")
 st.markdown("**Note:** The prediction is based on a trained machine learning model. Actual prices may vary.")
