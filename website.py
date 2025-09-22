@@ -26,25 +26,48 @@ st.markdown(
         background-color: #0E1117;
         color: #FAFAFA;
     }
+
+    /* Titles and headers */
+    h1, h2, h3, h4, h5, h6, p, label, span {
+        color: #FAFAFA !important;
+    }
+
     /* Buttons */
     .stButton>button {
-        background-color: #1f77b4;
-        color: white;
+        background-color: #1f77b4 !important;
+        color: white !important;
+        border-radius: 8px;
+        border: none;
     }
-    /* Sidebar inputs */
-    .stSlider>div>div>div>div, .stNumberInput>div>input, .stSelectbox>div>div>div {
-        color: black !important;
-        background-color: #e0e0e0 !important;
+    .stButton>button:hover {
+        background-color: #166298 !important;
+        color: #ffffff !important;
     }
+
+    /* Sidebar inputs (sliders, selectbox, number input) */
+    .stSlider>div>div>div>div, 
+    .stNumberInput input, 
+    .stSelectbox div[data-baseweb="select"] > div {
+        background-color: #2C2F38 !important;
+        color: #FAFAFA !important;
+        border-radius: 6px;
+    }
+
     /* Dataframe display */
-    .stDataFrame>div>div>div>div {
-        color: black !important;
-        background-color: #FAFAFA !important;
+    .stDataFrame div[data-testid="stDataFrame"] {
+        background-color: #1E222A !important;
+        color: #FAFAFA !important;
+    }
+
+    /* Table text */
+    .stDataFrame td, .stDataFrame th {
+        color: #FAFAFA !important;
     }
     </style>
     """, unsafe_allow_html=True
 )
 
+# --- Title ---
 st.title("🏡 House Price Prediction App")
 st.markdown("Enter the details below to predict the house price.")
 
@@ -52,9 +75,9 @@ st.markdown("Enter the details below to predict the house price.")
 if 'history' not in st.session_state:
     st.session_state.history = []
 
+# --- Sidebar Inputs ---
 st.sidebar.header("🏠 House Features Input")
 
-# --- User Inputs ---
 area = st.sidebar.number_input("Total Area (sqft)", min_value=100, max_value=20000, value=1000, step=50)
 bedrooms = st.sidebar.slider("Number of Bedrooms", 1, 10, 3)
 bathrooms = st.sidebar.slider("Number of Bathrooms", 1, 10, 2)
